@@ -1,36 +1,54 @@
+use std::net::Ipv4Addr;
+
+struct Segment{
+    // @TODO
+    shadow_hand_shaking: bool
+    // data: L1, segment: L3
+}
+
+struct Port{
+    date: Option<Segment>,
+    well_known: WellKnown,
+    port_number: u32,
+    established: bool,
+}
+
+// 0 ~ 1023
 struct WellKnown{
+    ip: Ipv4Addr,
+    segment: Packet,
+
     flag: bool,
+
+    // @TODO Add well known ports
     ftp: u32,
     ftp_two: u32,
-    ssh: u32,
-    telnet: u32,
-    // @TODO Add well known ports
 }
 impl WellKnown{
-    pub fn new(flag: bool) -> Self{
+    pub fn new(network_data_bus: &NetworkDevice, flag: bool) -> Self{
+        // @TODO IO
+        let ip= Ipv4Addr::new(196, 168, 0, 1);
+
+        // @TODO add specific ports
         let ftp= 20;
         let ftp_two= 21;
-        let ssh= 22;
-        let telnet= 23;
+
+        // Read
+        // copy and save vector vs smart pointer(4byte)
+        let v_data_bus= network_data_bus.from_data();
+        let segment= Box::from(v_data_bus);
 
         if flag != true{
-            
+            panic!("not varified packet {:?}", segment)       
         }else {
-            self { flag, ftp, ftp_two, ssh, telnet }
+            WellKnown { ip, flag, ftp, ftp_two }
         }
 
-
-        self { flag, ftp, ftp_two, ssh, telnet }
+        WellKnown { ip, flag, ftp, ftp_two  }
     }
 }
 
 
-struct Port{
-    date: Some(date),
-    well_known: Some(WellKnown),
-    port_number: Some(u32),
-    established: Some(false),
-}
 
 fn main() {
     println!("Hello, world!");
